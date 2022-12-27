@@ -45,30 +45,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @Override
-    public Usuario guardarUsuario(Usuario usuario, String roles) throws Exception {
+    public Usuario guardarUsuario(Usuario usuario) throws Exception {
 
         Optional <Usuario> usuarioLocal = usuarioRepository.findByCorreo(usuario.getCorreo());
 
-        if(usuarioLocal != null){
+        if(usuarioLocal.isPresent()){
             System.out.println("El usuario ya existe");
             throw new Exception("El usuario ya está presente");
         }
-        else{
-           Long a = rolRepository.getIdByName2(roles);
-           System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: "+ a );
-           Integer rol= Math.toIntExact(a);
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: "+ rol );
-
-            usuario.setIdRol(rol);
-            //Optional<Rol> role = Optional.empty();
-            //for(Rol rol:roles){
-
-                //role = rolRepository.findById(usuario.getIdRol());
-            //}
-            //usuario.setIdRol(role.get().getId());
-
-        }
-
+        
         usuarioRepository.save(usuario);
         return usuario;
 

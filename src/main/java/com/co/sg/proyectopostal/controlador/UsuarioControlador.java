@@ -43,8 +43,8 @@ public class UsuarioControlador {
 
     @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/registroUsuario")
-    public void registro(@RequestBody Usuario usuario, @RequestParam String roles) throws Exception {
-        usuarioServiceImpl.guardarUsuario(usuario,roles);
+    public void registro(@RequestBody Usuario usuario) throws Exception {
+        usuarioServiceImpl.guardarUsuario(usuario);
 
     }
 

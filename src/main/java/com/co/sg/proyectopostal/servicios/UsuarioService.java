@@ -14,7 +14,7 @@ import java.util.Set;
 public interface UsuarioService {
 
     @CrossOrigin(origins = "http://localhost:4200")
-    public Usuario guardarUsuario(Usuario usuario, String roles) throws Exception;
+    public Usuario guardarUsuario(Usuario usuario) throws Exception;
 
 
     public Boolean cargarArchivo(MultipartFile file, String correo) throws Exception;
