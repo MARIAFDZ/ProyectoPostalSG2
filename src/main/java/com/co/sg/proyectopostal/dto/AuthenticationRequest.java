@@ -1,8 +1,12 @@
 package com.co.sg.proyectopostal.dto;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 public class AuthenticationRequest {
     private String username;
     private String password;
+
+
 
     public String getUsername() {
         return username;

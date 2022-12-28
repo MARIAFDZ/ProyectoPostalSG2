@@ -8,6 +8,7 @@ import com.co.sg.proyectopostal.repositorios.UsuarioRepository;
 import com.co.sg.proyectopostal.servicios.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +42,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final ArchivoServiceImpl archivoServiceimpl;
 
+    //private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
 
     @CrossOrigin(origins = "http://localhost:4200")
@@ -53,7 +56,9 @@ public class UsuarioServiceImpl implements UsuarioService {
             System.out.println("El usuario ya existe");
             throw new Exception("El usuario ya está presente");
         }
-        
+
+        //usuario.setContrasenia(bCryptPasswordEncoder.encode(usuario.getContrasenia()));
+
         usuarioRepository.save(usuario);
         return usuario;
 

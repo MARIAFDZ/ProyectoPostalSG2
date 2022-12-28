@@ -16,12 +16,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
 import java.util.Set;
+
+import static org.springframework.security.crypto.bcrypt.BCrypt.checkpw;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -38,6 +41,11 @@ public class UsuarioControlador {
     private JWTUtil jwtUtil;
     @Autowired
     private AuthenticationConfig authenticationManager;
+
+    //@Autowired
+    //private  BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
     @Autowired
     UserDetailService userDetailService;
 
@@ -52,10 +60,17 @@ public class UsuarioControlador {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> createToken(@RequestBody AuthenticationRequest request) throws AuthenticationException, Exception {
         try {
-            authenticationManager.authenticationManagerBean().authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-            UserDetails userDetails = userDetailService.loadUserByUsername(request.getUsername());
-            String jwt = jwtUtil.generateToken(userDetails);
 
+            //String contra = bCryptPasswordEncoder.encode("1234");
+            //System.out.println(checkpw("1234",contra));
+
+            System.out.println(authenticationManager.authenticationManagerBean().authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword())));
+            UserDetails userDetails = userDetailService.loadUserByUsername(request.getUsername());
+            System.out.println(userDetails);
+            String jwt = jwtUtil.generateToken(userDetails);
             return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
         } catch (BadCredentialsException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

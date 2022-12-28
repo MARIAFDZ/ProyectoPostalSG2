@@ -28,6 +28,10 @@ public class UserDetailService implements UserDetailsService {
         }
         String usuario2 = usuario.get().getCorreo();
         String pass = "{noop}" + usuario.get().getContrasenia();
+
+
         return new User(usuario2, pass, new ArrayList<>());
     }
+
+
 }

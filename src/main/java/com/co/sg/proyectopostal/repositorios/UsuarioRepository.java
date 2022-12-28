@@ -16,9 +16,15 @@ public interface UsuarioRepository extends CrudRepository<Usuario, String> {
     Optional<Usuario> findByCorreo (String correo);
 
 
+
+
     @CrossOrigin(origins = "http://localhost:4200")
     @Query(value = "select idrol from USUARIOS r where r.correo= :correos", nativeQuery = true)
     Long getAllByCorreo2(@Param("correos") String correos);
+
+
+
+
 
 
 
