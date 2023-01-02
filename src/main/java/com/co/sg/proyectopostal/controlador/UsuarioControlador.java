@@ -5,8 +5,10 @@ import com.co.sg.proyectopostal.Security.JWTUtil;
 import com.co.sg.proyectopostal.Security.UserDetailService;
 import com.co.sg.proyectopostal.dto.AuthenticationRequest;
 import com.co.sg.proyectopostal.dto.AuthenticationResponse;
+import com.co.sg.proyectopostal.entidades.Archivo;
 import com.co.sg.proyectopostal.entidades.Rol;
 import com.co.sg.proyectopostal.entidades.Usuario;
+import com.co.sg.proyectopostal.impl.ArchivoServiceImpl;
 import com.co.sg.proyectopostal.impl.UsuarioServiceImpl;
 import com.co.sg.proyectopostal.repositorios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ import static org.springframework.security.crypto.bcrypt.BCrypt.checkpw;
 public class UsuarioControlador {
 
     @Autowired
+    private ArchivoServiceImpl archivoServiceImpl;
+    @Autowired
     private UsuarioServiceImpl usuarioServiceImpl;
 
     @Autowired
@@ -42,8 +46,8 @@ public class UsuarioControlador {
     @Autowired
     private AuthenticationConfig authenticationManager;
 
-    //@Autowired
-    //private  BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private  BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Autowired
@@ -61,15 +65,12 @@ public class UsuarioControlador {
     public ResponseEntity<AuthenticationResponse> createToken(@RequestBody AuthenticationRequest request) throws AuthenticationException, Exception {
         try {
 
-            //String contra = bCryptPasswordEncoder.encode("1234");
-            //System.out.println(checkpw("1234",contra));
 
-            System.out.println(authenticationManager.authenticationManagerBean().authenticate(
+            authenticationManager.authenticationManagerBean().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getUsername(),
-                            request.getPassword())));
+                            request.getPassword()));
             UserDetails userDetails = userDetailService.loadUserByUsername(request.getUsername());
-            System.out.println(userDetails);
             String jwt = jwtUtil.generateToken(userDetails);
             return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
         } catch (BadCredentialsException e) {
@@ -82,10 +83,8 @@ public class UsuarioControlador {
     @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/obtenerRolUser")
     public Long encontrarUsuario(@RequestParam String correo){
-        System.out.println(correo);
 
         Long usuario = usuarioRepository.getAllByCorreo2(correo);
-        System.out.println(usuario);
 
 
         return usuario;
@@ -93,12 +92,18 @@ public class UsuarioControlador {
 
     @PostMapping("/cargarArchivo")
     public Boolean cargaArchivo(@RequestParam MultipartFile file, @RequestParam String correo) throws Exception{
-        System.out.println(file);
+
 
         return usuarioServiceImpl.cargarArchivo(file, correo);
     }
-
-
+    @GetMapping("/obtenerInfoArchivo")
+    public List <Archivo> listar(){
+        try {
+            return archivoServiceImpl.listar();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
 

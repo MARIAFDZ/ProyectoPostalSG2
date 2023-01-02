@@ -20,10 +20,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +39,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final ArchivoServiceImpl archivoServiceimpl;
 
-    //private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
 
@@ -57,7 +54,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new Exception("El usuario ya está presente");
         }
 
-        //usuario.setContrasenia(bCryptPasswordEncoder.encode(usuario.getContrasenia()));
+        usuario.setContrasenia(bCryptPasswordEncoder.encode(usuario.getContrasenia()));
 
         usuarioRepository.save(usuario);
         return usuario;
@@ -70,15 +67,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Boolean cargarArchivo(MultipartFile file, String correo) throws Exception {
 
+
             var archivo = file;
             String linea = "";
             String separador = "|";
             InputStream is = archivo.getInputStream();
             Archivo archivoEntity = Archivo.builder().build();
-
-            int ID = 0;
-            SimpleDateFormat formatter  = new SimpleDateFormat ("yyyy-MM-dd");
-
+            String timeStamp = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
             try (var entrada = new BufferedReader(new InputStreamReader(is))) {
 
@@ -95,15 +90,14 @@ public class UsuarioServiceImpl implements UsuarioService {
                 }
 
                 Optional <Usuario> optionalUsuario  = usuarioRepository.findByCorreo(correo);
-                Instant instant = Instant.now();
-                Date date = Date.from(instant);
-
                 if(optionalUsuario.isPresent()){
                     Integer idUser = optionalUsuario.get().getId();
+                    String UsuarioCargaArchivo = optionalUsuario.get().getNombre() + " " + optionalUsuario.get().getApellido();
                     Archivo archivoBuild = Archivo.builder()
-                            .nombre(archivo.getName())
+                            .nombre(file.getOriginalFilename())
                             .idUsuario(String.valueOf(idUser))
-                            .fechaActualizacion(date)
+                            .fechaActualizacion(timeStamp)
+                            .nombreUsuario(UsuarioCargaArchivo)
                             .build();
                     archivoServiceimpl.guardarInfoArchivo(archivoBuild);
                     return true;
@@ -142,6 +136,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             String agenciaDestino = cliente[6];
             String numeroGiro = cliente [7];
             String valorGiro = cliente [8];
+            String pk = cedula+numeroGiro;
 
             Terceros tercero = Terceros.builder()
                     .idTipo(idTipoDocumento)
@@ -151,8 +146,9 @@ public class UsuarioServiceImpl implements UsuarioService {
                     .apellido1(apellido1)
                     .apellido2(apellido2)
                     .agenciaDestino(agenciaDestino)
-                    .id(numeroGiro)
+                    .numero_giro(numeroGiro)
                     .valorGiro(valorGiro)
+                    .primary(pk)
                     .build();
 
 

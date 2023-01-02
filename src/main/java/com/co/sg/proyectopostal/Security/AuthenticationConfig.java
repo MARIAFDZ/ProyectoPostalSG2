@@ -27,10 +27,10 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
     }
 
-    //@Bean
-    //public BCryptPasswordEncoder bcryptPasswordEncoder(){
-        //return new BCryptPasswordEncoder();
-    //}
+    @Bean
+    public BCryptPasswordEncoder bcryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
 
 

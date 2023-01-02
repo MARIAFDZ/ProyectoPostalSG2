@@ -14,9 +14,8 @@ import javax.persistence.*;
 @Entity
 public class Terceros {
 
-    @Id
     @Column(name = "NUMERO_GIRO")
-    private String id;
+    private String numero_giro;
 
     @Column(name = "TIPO_DOCUMENTO")
     private Integer idTipo;
@@ -42,7 +41,7 @@ public class Terceros {
     @Column(name = "VALOR_GIRO")
     private String valorGiro;
 
-
-
-
+    @Id
+    @Column(name = "PRIMARY_KEY")
+    private String primary;
 }

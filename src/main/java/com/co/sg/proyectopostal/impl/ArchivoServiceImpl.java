@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200")
 @Service
@@ -20,6 +22,10 @@ public class ArchivoServiceImpl implements ArchivoService {
     public void guardarInfoArchivo(Archivo archivo) throws Exception {
         archivoRepository.save(archivo);
 
+    }
+    @Override
+    public List<Archivo> listar() throws Exception {
+        return archivoRepository.findAll();
     }
 
 

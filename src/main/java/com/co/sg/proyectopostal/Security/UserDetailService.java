@@ -27,7 +27,7 @@ public class UserDetailService implements UserDetailsService {
             throw new UsernameNotFoundException(correo);
         }
         String usuario2 = usuario.get().getCorreo();
-        String pass = "{noop}" + usuario.get().getContrasenia();
+        String pass = usuario.get().getContrasenia();
 
 
         return new User(usuario2, pass, new ArrayList<>());

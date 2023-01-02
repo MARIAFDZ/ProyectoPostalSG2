@@ -27,7 +27,10 @@ public class Archivo {
     private String nombre;
 
     @Column(name = "FECHA_ACTUALIZACION")
-    private Date fechaActualizacion;
+    private String fechaActualizacion;
+
+    @Column(name = "NOMBRE_USUARIO")
+    private String nombreUsuario;
 
     //@ManyToOne
     //@JoinColumn(name = "ID_USUARIO", insertable = false, updatable = false)
@@ -58,13 +61,19 @@ public class Archivo {
         this.nombre = nombre;
     }
 
-    public Date getFechaActualizacion() {
+    public String getFechaActualizacion() {
         return fechaActualizacion;
     }
 
-    public void setFechaActualizacion(Date fechaActualizacion) {
+    public void setFechaActualizacion(String fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
     }
 
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
 
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
 }
